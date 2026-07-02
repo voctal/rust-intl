@@ -1,0 +1,7 @@
+{
+  "title": "Server Settings",
+  "saved": "Settings saved for {guild}.",
+  "role": {
+    "selected": "{gender, select, male {He selected} female {She selected} other {They selected}} the {role} role."
+  }
+}

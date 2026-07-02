@@ -1,0 +1,8 @@
+{
+  "static_text": "Hello there, welcome to the bot!",
+  "greeting": "Hello, {name}!",
+  "status": {
+    "active": "{count, plural, =0 {No active members} one {1 active member} other {{count} active members}}"
+  },
+  "farewell": "Goodbye, {name}. See you {days, plural, one {in 1 day} other {in {days} days}}."
+}

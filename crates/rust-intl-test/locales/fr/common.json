@@ -1,0 +1,8 @@
+{
+  "static_text": "Bonjour, bienvenue sur le bot !",
+  "greeting": "Bonjour, {name} !",
+  "status": {
+    "active": "{count, plural, =0 {Aucun membre actif} one {1 membre actif} other {{count} membres actifs}}"
+  },
+  "farewell": "Au revoir, {name}. À {days, plural, one {dans 1 jour} other {dans {days} jours}}."
+}

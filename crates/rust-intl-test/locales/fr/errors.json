@@ -1,0 +1,4 @@
+{
+  "not_found": "Impossible de trouver cette commande.",
+  "missing_permission": "Vous avez besoin de la permission {permission} pour faire ça."
+}

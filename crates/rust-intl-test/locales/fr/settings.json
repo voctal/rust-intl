@@ -1,0 +1,7 @@
+{
+  "title": "Paramètres du serveur",
+  "saved": "Paramètres enregistrés pour {guild}.",
+  "role": {
+    "selected": "{gender, select, male {Il a sélectionné} female {Elle a sélectionné} other {Iels ont sélectionné}} le rôle {role}."
+  }
+}
