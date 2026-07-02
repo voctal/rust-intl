@@ -29,7 +29,7 @@ Compile-time validated i18n library for Rust. It uses the [ICU4X](https://github
 
 ```rs
 // main.rs
-rust_intl::load!(); // scans ./locales/[locale]/[namespace].json by default
+rust_intl::load!(default = "en"); // loads ./locales/[locale]/[namespace].json by default
 ```
 
 ```rs
@@ -41,8 +41,8 @@ fn main() {
 
 To load a different directory:
 
-```rust
-rust_intl::load!(dir = "./translations");
+```rs
+rust_intl::load!(path = "./translations");
 ```
 
 ## Message syntax
