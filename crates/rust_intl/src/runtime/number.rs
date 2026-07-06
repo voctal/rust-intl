@@ -154,6 +154,6 @@ mod tests {
     fn number_arg_from_primitives() {
         let _: NumberArg = 5i32.into();
         let _: NumberArg = 5u64.into();
-        let _: NumberArg = 3.14f64.into();
+        let _: NumberArg = core::f64::consts::PI.into();
     }
 }

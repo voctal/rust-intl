@@ -251,7 +251,7 @@ pub fn generate(schema: &Schema) -> TokenStream {
         #[macro_export]
         macro_rules! get_current_locale {
             () => {
-                ::rust_intl::runtime::get_current_locale::<crate::Locale>()
+                ::rust_intl::runtime::get_current_locale::<Locale>()
             };
         }
 
@@ -260,7 +260,7 @@ pub fn generate(schema: &Schema) -> TokenStream {
         #[macro_export]
         macro_rules! set_current_locale {
             ($locale:expr) => {
-                ::rust_intl::runtime::set_current_locale::<crate::Locale>($locale)
+                ::rust_intl::runtime::set_current_locale::<Locale>($locale)
             };
         }
     };

@@ -163,16 +163,16 @@ impl Parser {
                     ));
                 }
                 for (k, _) in &arms {
-                    if let ArmKey::Category(c) = k {
-                        if !matches!(
+                    if let ArmKey::Category(c) = k
+                        && !matches!(
                             c.as_str(),
                             "zero" | "one" | "two" | "few" | "many" | "other"
-                        ) {
-                            return Err(format!(
-                                "'{c}' is not a valid plural category for '{name}, {kind}' \
+                        )
+                    {
+                        return Err(format!(
+                            "'{c}' is not a valid plural category for '{name}, {kind}' \
                                  (expected one of: zero, one, two, few, many, other, or =N)"
-                            ));
-                        }
+                        ));
                     }
                 }
                 Ok(AstNode::Plural {
