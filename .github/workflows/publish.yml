@@ -3,6 +3,7 @@ name: Publish to Crates.io
 on:
     release:
         types: [published]
+    workflow_dispatch:
 
 env:
     CARGO_TERM_COLOR: always
@@ -12,12 +13,13 @@ jobs:
     publish:
         name: Publish Crates
         runs-on: ubuntu-latest
-        timeout-minutes: 10
+        timeout-minutes: 5
         steps:
             - name: Checkout Repository
               uses: actions/checkout@v4
 
             - name: Verify version matches release tag
+              if: github.event_name == 'release'
               run: |
                   TAG=${GITHUB_REF_NAME}
                   cargo metadata --no-deps --format-version 1 > meta.json
