@@ -14,5 +14,5 @@ description = "A Rust internationalization library"
 edition = "2024"
 
 [workspace.dependencies]
-rust_intl = { path = "./crates/rust-intl" }
-rust_intl_macros = { path = "./crates/rust-intl-macros" }
+rust_intl = { path = "./crates/rust_intl" }
+rust_intl_macros = { path = "./crates/rust_intl_macros" }

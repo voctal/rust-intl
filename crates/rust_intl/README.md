@@ -1,5 +1,5 @@
 <div align="center">
-    <h1>rust-intl</h1>
+    <h1>rust_intl</h1>
     <p>
         <a href="https://voctal.dev/discord"><img src="https://img.shields.io/discord/1336303640725553213?color=5865F2&logo=discord&logoColor=white" alt="Discord server" /></a>
         <a href="https://github.com/voctal/rust-intl/commits/main"><img alt="Last commit" src="https://img.shields.io/github/last-commit/voctal/rust-intl?logo=github&logoColor=ffffff" /></a>
@@ -11,7 +11,7 @@
 Compile-time validated i18n library for Rust. It uses the [ICU4X](https://github.com/unicode-org/icu4x) crate from Unicode and follows some of the ICU MessageFormat syntax: `{name}`, `{count, plural, ...}`, `{gender, select, ...}`. Unknown keys, missing/extra arguments, wrong argument types, and missing `other` arms are compile errors.
 
 > [!IMPORTANT]
-> `rust-intl` is in development and is not ready for production use.
+> `rust_intl` is in development and is not ready for production use.
 
 ## Features
 
