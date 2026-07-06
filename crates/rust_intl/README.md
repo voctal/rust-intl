@@ -1,4 +1,5 @@
 <div align="center">
+    <img src="./.github/images/ferris.png" width="152" alt="Ferris">
     <h1>rust_intl</h1>
     <p>
         <a href="https://voctal.dev/discord"><img src="https://img.shields.io/discord/1336303640725553213?color=5865F2&logo=discord&logoColor=white" alt="Discord server" /></a>
@@ -37,14 +38,14 @@ rust_intl = "0.1"
 
 The `load!` macro will generate many types in your crates, including `Locale`, `Lang`, `get_current_locale!`, `set_current_locale!`, etc.
 
-```rs
+```rust
 // main.rs
 
 // loads locales/[locale]/[namespace].json by default
 rust_intl::load!(default = "en");
 ```
 
-```rs
+```rust
 // build.rs
 fn main() {
     println!("cargo:rerun-if-changed=locales");
@@ -53,7 +54,7 @@ fn main() {
 
 To load a different directory:
 
-```rs
+```rust
 rust_intl::load!(path = "./translations");
 ```
 
@@ -63,7 +64,7 @@ rust_intl::load!(path = "./translations");
 
 The main way to translate is using the `t!` macro. The macro always returns a `String`.
 
-```rs
+```rust
 // Using the current or default locale
 t!("common.greeting", name = "Foo");
 
@@ -75,7 +76,7 @@ t!(Locale::Fr, "key");
 
 You can also use any type that implement LocaleProvider as the first argument:
 
-```rs
+```rust
 struct MyContext {
     locale: Locale,
 }
@@ -97,7 +98,7 @@ For single-user apps, like desktop apps, usually only one locale can be used at 
 
 Instead, you can use
 
-```rs
+```rust
 // Change the "global" locale for every t! that dont have "locale = ..."
 set_current_locale!(Locale::Fr);
 
@@ -113,7 +114,7 @@ let locale = get_current_locale!();
 
 Instead of:
 
-```rs
+```rust
 async fn some_function(locale: Locale) {
     t!(locale, "common.informations.menu.errors.key1");
     t!(locale, "common.informations.menu.errors.key2");
@@ -123,7 +124,7 @@ async fn some_function(locale: Locale) {
 
 You can use:
 
-```rs
+```rust
 #[t_ns(namespace = "common.informations.menu.errors")]
 async fn some_function(locale: Locale) {
     t!(locale, "key1");
@@ -134,7 +135,7 @@ async fn some_function(locale: Locale) {
 
 However if you need keys from outside the prefix, you will need `/` to start back at the root:
 
-```rs
+```rust
 t!(lang, "/common.another_path.key"); // -> "common.another_path.key"
 ```
 
@@ -142,14 +143,14 @@ t!(lang, "/common.another_path.key"); // -> "common.another_path.key"
 
 Every keys from your translations are also translated into static functions on `Locale` & `Lang`.
 
-```rs
+```rust
 t!("hello.world");
 Locale::Fr.t_hello_world(); // all keys are prefixed with t_
 ```
 
 A `Lang` struct is also available:
 
-```rs
+```rust
 let lang = Lang::new(Locale::Fr);
 lang.t_hello_world_with_args("Foo");
 ```
@@ -158,7 +159,7 @@ lang.t_hello_world_with_args("Foo");
 
 ## Message syntax
 
-```rs
+```rust
 "{name}"                                                           // interpolation, any Display type
 "{count, plural, =0 {none} one {1 item} other {{count} items}}"    // CLDR plural; `other` required
 "{n, selectordinal, one {1st} two {2nd} few {3rd} other {{n}th}}"  // ordinal plural
@@ -169,7 +170,7 @@ lang.t_hello_world_with_args("Foo");
 
 ## Numbers
 
-```rs
+```rust
 // ICU formatting, english: 1000 -> "1,000", french: 1000 -> "1 000"
 t!("items", count = 1_000u32);
 
