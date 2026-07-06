@@ -234,6 +234,37 @@ pub fn generate(schema: &Schema) -> TokenStream {
         }
     };
 
+    let current_locale_macros = quote! {
+        /// Returns the current [`Locale`], as last set by
+        /// [`set_current_locale!`], or [`Locale::DEFAULT`] if it was never set.
+        ///
+        /// It is mostly meant for single-user apps (desktop, CLI, ...) where only one
+        /// locale is active at a time.
+        ///
+        /// It returns a `Locale` by value, so it's cheap to call,
+        /// and thread-safe.
+        ///
+        /// ```ignore
+        /// set_current_locale!(Locale::Fr);
+        /// assert_eq!(get_current_locale!(), Locale::Fr);
+        /// ```
+        #[macro_export]
+        macro_rules! get_current_locale {
+            () => {
+                ::rust_intl::runtime::get_current_locale::<crate::Locale>()
+            };
+        }
+
+        /// Sets the current [`Locale`]. See
+        /// [`get_current_locale!`].
+        #[macro_export]
+        macro_rules! set_current_locale {
+            ($locale:expr) => {
+                ::rust_intl::runtime::set_current_locale::<crate::Locale>($locale)
+            };
+        }
+    };
+
     let locale_provider = quote! {
         /// Implemented by anything that can return a [`Locale`].
         ///
@@ -372,6 +403,7 @@ pub fn generate(schema: &Schema) -> TokenStream {
     quote! {
         #(#file_tracking)*
         #locale_enum
+        #current_locale_macros
         #locale_provider
         #lang_struct
 
