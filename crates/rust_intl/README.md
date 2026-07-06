@@ -11,29 +11,41 @@
 Compile-time validated i18n library for Rust. It uses the [ICU4X](https://github.com/unicode-org/icu4x) crate from Unicode and follows some of the ICU MessageFormat syntax: `{name}`, `{count, plural, ...}`, `{gender, select, ...}`. Unknown keys, missing/extra arguments, wrong argument types, and missing `other` arms are compile errors.
 
 > [!IMPORTANT]
-> `rust_intl` is in development and is not ready for production use.
+> `rust_intl` is still in development but has been tested in production apps. We plan to support more of the ICU message syntax and allow other locales file formats (e.g. yml, toml) and backend customization (e.g. translations loaded/fetched at startup with no compile-time validation).
 
 ## Features
 
-- `t!` macro
-- `lang.t_<key>()` functions
-- Compile-time validation:
-    ```rs
-    t!("no_such_key");                          // unknown translation key 'no_such_key'
-    t!("common.greting", name = "typo");        // unknown translation key 'common.greting'. Did you mean 'common.greeting'?
-    t!("common.greeting");                      // argument mismatch. expected: name, missing: name
-    t!("common.greeting", name = "Foo", x = 1); // argument mismatch. expected: name, extra: x
-    ```
+- `t!` macro with compile-time validation
+- Typesafe auto-generated functions (`t_your_key(args)`)
+- Function namespacing with `#[t_ns(namespace = "prefix")]`
+- Global locale for single-user apps: `set_current_locale!(Locale::Fr)`
+- Partial support of ICU Message Syntax
 
-## Setup
+## Installation
+
+```sh
+cargo add rust_intl
+```
+
+or
+
+```toml
+rust_intl = "0.1"
+```
+
+## Usage
+
+The `load!` macro will generate many types in your crates, including `Locale`, `Lang`, `get_current_locale!`, `set_current_locale!`, etc.
 
 ```rs
 // main.rs
-rust_intl::load!(default = "en"); // loads ./locales/[locale]/[namespace].json by default
+
+// loads locales/[locale]/[namespace].json by default
+rust_intl::load!(default = "en");
 ```
 
 ```rs
-// build.rs (rebuild when translation files change)
+// build.rs
 fn main() {
     println!("cargo:rerun-if-changed=locales");
 }
@@ -44,6 +56,105 @@ To load a different directory:
 ```rs
 rust_intl::load!(path = "./translations");
 ```
+
+## Translations
+
+### t! macro
+
+The main way to translate is using the `t!` macro. The macro always returns a `String`.
+
+```rs
+// Using the current or default locale
+t!("common.greeting", name = "Foo");
+
+// You can override the locale with "locale = ..."
+t!("key", locale = Locale::Fr);
+// or
+t!(Locale::Fr, "key");
+```
+
+You can also use any type that implement LocaleProvider as the first argument:
+
+```rs
+struct MyContext {
+    locale: Locale,
+}
+impl LocaleProvider for MyContext {
+    fn i18n_locale(&self) -> crate::Locale {
+        self.locale
+    }
+}
+
+fn my_function(ctx: MyContext) -> String {
+    // `ctx` as the first arg, to use ctx.locale as the locale
+    t!(ctx, "common.greeting", name = "Foo");
+}
+```
+
+### get_current_locale! and set_current_locale!
+
+For single-user apps, like desktop apps, usually only one locale can be used at a time so there is no need to use `t!(ctx, "key")` everywhere.
+
+Instead, you can use
+
+```rs
+// Change the "global" locale for every t! that dont have "locale = ..."
+set_current_locale!(Locale::Fr);
+
+t!("key"); // will be in fr
+
+// Get the locale if needed
+let locale = get_current_locale!();
+```
+
+### Namespacing a whole function
+
+`#[t_ns(namespace = "...")]` prefixes every `t!()` call inside the function. Works on `async fn` too. Example:
+
+Instead of:
+
+```rs
+async fn some_function(locale: Locale) {
+    t!(locale, "common.informations.menu.errors.key1");
+    t!(locale, "common.informations.menu.errors.key2");
+    t!(locale, "common.informations.menu.errors.key3");
+}
+```
+
+You can use:
+
+```rs
+#[t_ns(namespace = "common.informations.menu.errors")]
+async fn some_function(locale: Locale) {
+    t!(locale, "key1");
+    t!(locale, "key2");
+    t!(locale, "key3");
+}
+```
+
+However if you need keys from outside the prefix, you will need `/` to start back at the root:
+
+```rs
+t!(lang, "/common.another_path.key"); // -> "common.another_path.key"
+```
+
+### Lang & auto-generated functions
+
+Every keys from your translations are also translated into static functions on `Locale` & `Lang`.
+
+```rs
+t!("hello.world");
+Locale::Fr.t_hello_world(); // all keys are prefixed with t_
+```
+
+A `Lang` struct is also available:
+
+```rs
+let lang = Lang::new(Locale::Fr);
+lang.t_hello_world_with_args("Foo");
+```
+
+`lang.t_key()` returns `&'static str` for no-argument keys (zero allocation) and `String` for keys with arguments.
 
 ## Message syntax
 
@@ -56,25 +167,6 @@ rust_intl::load!(path = "./translations");
 "Use '{name}' literally"                                           // '{...}' escapes braces as plain text
 ```
 
-## Calling translations
-
-There is two equivalent forms. `t!()` is a proc-macro so it can validate the key at compile time, `lang.t_key()` is a plain generated if you don't want the macro.
-
-```rs
-// t! macro
-t!("common.greeting", name = "Foo");
-t!("common.greeting", locale = Locale::Fr, name = "Foo");
-t!(lang, "common.greeting", name = "Foo"); // lang implements LocaleProvider
-
-// Methods
-let lang = Lang::new(Locale::Fr);
-lang.t_common_greeting("Foo");
-```
-
-The method name is the dotted key flattened with underscores and a `t_`, e.g. `common.status.active` becomes `t_common_status_active()`.
-
-`t!()` always returns `String`. `lang.t_key()` returns `&'static str` for no-argument keys (zero allocation) and `String` for keys with arguments.
-
 ## Numbers
 
 ```rs
@@ -84,21 +176,4 @@ t!("items", count = 1_000u32);
 // custom display string
 use rust_intl::NumberArg;
 t!(lang, "items", count = NumberArg::with_display(1_000u32, "1K"));
-```
-
-## Namespacing a whole function
-
-`#[t_ns(namespace = "...")]` prefixes every `t!()` call inside the function. Works on `async fn` too:
-
-```rs
-#[t_ns(namespace = "settings")]
-async fn show_settings(lang: Lang) -> String {
-    t!(lang, "title") // becomes "settings.title"
-}
-```
-
-Prefix a key with `/` to bypass the namespace prefix:
-
-```rs
-t!(lang, "/common.static_text"); // becomes "common.static_text" anyway
 ```

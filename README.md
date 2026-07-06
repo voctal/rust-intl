@@ -1,1 +1,1 @@
-crates/rust-intl/README.md
+crates/rust_intl/README.md
