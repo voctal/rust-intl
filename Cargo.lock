@@ -187,7 +187,7 @@ dependencies = [
 
 [[package]]
 name = "rust_intl"
-version = "0.1.1"
+version = "0.2.0"
 dependencies = [
  "fixed_decimal",
  "icu_decimal",
@@ -198,7 +198,7 @@ dependencies = [
 
 [[package]]
 name = "rust_intl_macros"
-version = "0.1.1"
+version = "0.2.0"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -208,7 +208,7 @@ dependencies = [
 
 [[package]]
 name = "rust_intl_test"
-version = "0.1.1"
+version = "0.2.0"
 dependencies = [
  "rust_intl",
  "tokio",
