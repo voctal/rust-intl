@@ -5,7 +5,7 @@ members = ["crates/*"]
 resolver = "3"
 
 [workspace.package]
-version = "0.2.0"
+version = "0.2.1"
 categories = ["localization"]
 keywords = ["i18n", "icu", "intl", "localization", "translations"]
 license = "MIT"
@@ -14,5 +14,5 @@ description = "A Rust internationalization library"
 edition = "2024"
 
 [workspace.dependencies]
-rust_intl = { path = "./crates/rust_intl", version = "0.2.0" }
-rust_intl_macros = { path = "./crates/rust_intl_macros", version = "0.2.0" }
+rust_intl = { path = "./crates/rust_intl", version = "0.2.1" }
+rust_intl_macros = { path = "./crates/rust_intl_macros", version = "0.2.1" }
