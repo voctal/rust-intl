@@ -19,7 +19,7 @@ Compile-time validated i18n library for Rust. It uses the [ICU4X](https://github
 - `t!` macro with compile-time validation
 - Typesafe auto-generated functions (`t_your_key(args)`)
 - Function namespacing with `#[t_ns(namespace = "prefix")]`
-- Global locale for single-user apps: `set_current_locale!(Locale::Fr)`
+- Global locale for single-user apps: `set_current_locale(Locale::Fr)`
 - Partial support of ICU Message Syntax
 
 ## Installation
@@ -36,7 +36,7 @@ rust_intl = "0.1"
 
 ## Usage
 
-The `load!` macro will generate many types in your crates, including `Locale`, `Lang`, `get_current_locale!`, `set_current_locale!`, etc.
+The `load!` macro will generate many types in your crates, including `Locale`, `Lang`, `get_current_locale`, `set_current_locale`, etc.
 
 ```rust,ignore
 // main.rs
@@ -88,11 +88,11 @@ impl LocaleProvider for MyContext {
 
 fn my_function(ctx: MyContext) -> String {
     // `ctx` as the first arg, to use ctx.locale as the locale
-    t!(ctx, "common.greeting", name = "Foo");
+    t!(ctx, "common.greeting", name = "Foo")
 }
 ```
 
-### get_current_locale! and set_current_locale!
+### get_current_locale and set_current_locale
 
 For single-user apps, like desktop apps, usually only one locale can be used at a time so there is no need to use `t!(ctx, "key")` everywhere.
 
@@ -100,12 +100,12 @@ Instead, you can use
 
 ```rust,ignore
 // Change the "global" locale for every t! that dont have "locale = ..."
-set_current_locale!(Locale::Fr);
+set_current_locale(Locale::Fr);
 
 t!("key"); // will be in fr
 
 // Get the locale if needed
-let locale = get_current_locale!();
+let locale = get_current_locale();
 ```
 
 ### Namespacing a whole function
