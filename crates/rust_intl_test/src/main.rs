@@ -1,4 +1,8 @@
+mod file;
+
 use rust_intl::{NumberArg, t, t_ns};
+
+use crate::file::other_file;
 
 // Load locales
 rust_intl::load!();
@@ -159,17 +163,20 @@ async fn main() {
 
     println!("current_locale macros testing:");
 
-    assert_eq!(get_current_locale!(), Locale::DEFAULT);
+    assert_eq!(get_current_locale(), Locale::DEFAULT);
     println!(
         "{} {}",
-        get_current_locale!(),
+        get_current_locale(),
         t!("common.greeting", name = "someone")
     );
-    set_current_locale!(Locale::Fr);
-    assert_eq!(get_current_locale!(), Locale::Fr);
+    set_current_locale(Locale::Fr);
+    assert_eq!(get_current_locale(), Locale::Fr);
     println!(
         "{} {}",
-        get_current_locale!(),
+        get_current_locale(),
         t!("common.greeting", name = "someone")
     );
+    set_current_locale(Locale::DEFAULT);
+
+    other_file();
 }

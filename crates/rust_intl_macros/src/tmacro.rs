@@ -170,7 +170,7 @@ pub fn expand(call: TCall) -> TokenStream {
         // t!("key", locale = expr) -> direct Locale expression
         (None, Some(e)) => quote! { #e },
         // t!("key") -> use the default locale
-        (None, None) => quote! { get_current_locale!() },
+        (None, None) => quote! { crate::get_current_locale() },
     };
 
     let ordered_args: Vec<TokenStream> = info

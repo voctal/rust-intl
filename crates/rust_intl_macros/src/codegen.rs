@@ -248,20 +248,14 @@ pub fn generate(schema: &Schema) -> TokenStream {
         /// set_current_locale!(Locale::Fr);
         /// assert_eq!(get_current_locale!(), Locale::Fr);
         /// ```
-        #[macro_export]
-        macro_rules! get_current_locale {
-            () => {
-                ::rust_intl::runtime::get_current_locale::<Locale>()
-            };
+        pub fn get_current_locale() -> Locale {
+            ::rust_intl::runtime::get_current_locale::<Locale>()
         }
 
         /// Sets the current [`Locale`]. See
         /// [`get_current_locale!`].
-        #[macro_export]
-        macro_rules! set_current_locale {
-            ($locale:expr) => {
-                ::rust_intl::runtime::set_current_locale::<Locale>($locale)
-            };
+        pub fn set_current_locale(locale: Locale) {
+            ::rust_intl::runtime::set_current_locale::<Locale>(locale);
         }
     };
 
