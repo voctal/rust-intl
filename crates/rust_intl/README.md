@@ -1,5 +1,5 @@
 <div align="center">
-    <img src="./.github/images/ferris.png" width="152" alt="Ferris">
+    <img src="docs/images/ferris.png" width="152" alt="Ferris">
     <h1>rust_intl</h1>
     <p>
         <a href="https://voctal.dev/discord"><img src="https://img.shields.io/discord/1336303640725553213?color=5865F2&logo=discord&logoColor=white" alt="Discord server" /></a>
