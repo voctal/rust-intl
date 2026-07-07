@@ -28,12 +28,6 @@ Compile-time validated i18n library for Rust. It uses the [ICU4X](https://github
 cargo add rust_intl
 ```
 
-or
-
-```toml
-rust_intl = "0.1"
-```
-
 ## Usage
 
 The `load!` macro will generate many types in your crates, including `Locale`, `Lang`, `get_current_locale`, `set_current_locale`, etc.
