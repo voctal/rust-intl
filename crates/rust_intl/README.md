@@ -159,7 +159,7 @@ lang.t_hello_world_with_args("Foo");
 "{n, selectordinal, one {1st} two {2nd} few {3rd} other {{n}th}}"  // ordinal plural
 "{gender, select, male {He} female {She} other {They}}"            // `other` required
 "{v, number}"                                                      // and {v, date} / {v, time}: plain Display interpolation
-"Use '{name}' literally"                                           // '{...}' escapes braces as plain text
+"Use {{name}} literally"                                           // escapes braces as plain text
 ```
 
 ## Numbers

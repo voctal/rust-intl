@@ -92,43 +92,50 @@ impl Parser {
     fn parse_message(&mut self, stop_at_close: bool) -> Result<Vec<AstNode>, String> {
         let mut nodes = Vec::new();
         let mut text = String::new();
-        loop {
-            match self.peek() {
-                None => break,
-                Some('}') if stop_at_close => break,
-                Some('\'') => {
+
+        while let Some(c) = self.peek() {
+            match c {
+                '{' => {
                     self.bump();
-                    if self.peek() == Some('\'') {
-                        text.push('\'');
+                    if self.peek() == Some('{') {
+                        // `{{` => `{`
                         self.bump();
+                        text.push('{');
                     } else {
-                        // Quoted literal run until the next single quote (or EOF)
-                        while let Some(c) = self.peek() {
-                            if c == '\'' {
-                                self.bump();
-                                break;
-                            }
-                            text.push(c);
-                            self.bump();
+                        // Single `{` => start of a placeholder
+                        if !text.is_empty() {
+                            nodes.push(AstNode::Text(std::mem::take(&mut text)));
                         }
+                        nodes.push(self.parse_placeholder()?);
                     }
                 }
-                Some('{') => {
-                    if !text.is_empty() {
-                        nodes.push(AstNode::Text(std::mem::take(&mut text)));
+
+                '}' => {
+                    if stop_at_close {
+                        break;
                     }
+
                     self.bump();
-                    nodes.push(self.parse_placeholder()?);
+                    if self.peek() == Some('}') {
+                        // Top-level `}}` => escaped literal `}`
+                        self.bump();
+                        text.push('}');
+                    } else {
+                        text.push('}');
+                    }
                 }
-                Some(c) => {
+
+                c => {
                     text.push(c);
                     self.bump();
                 }
             }
         }
+
         if !text.is_empty() {
             nodes.push(AstNode::Text(text));
         }
+
         Ok(nodes)
     }
 

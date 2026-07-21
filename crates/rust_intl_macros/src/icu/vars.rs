@@ -107,13 +107,13 @@ mod tests {
 
     #[test]
     fn escaped_braces() {
-        let ast = parse("Use '{name}' literally").unwrap();
+        let ast = parse("Use {{name}} literally").unwrap();
         assert_eq!(ast, vec![AstNode::Text("Use {name} literally".into())]);
     }
 
     #[test]
     fn escaped_quote() {
-        let ast = parse("It''s {n}").unwrap();
+        let ast = parse("It's {n}").unwrap();
         assert_eq!(
             ast,
             vec![AstNode::Text("It's ".into()), AstNode::Var("n".into())]
